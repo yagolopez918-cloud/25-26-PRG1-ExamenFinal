@@ -72,40 +72,36 @@ public class CalculadoraDescuentos {
             System.out.print("Es temporada de rebajas? (1: Sí / 2: No): ");
             char hayRebajas = scanner.nextInt() == 1 ? 's' : 'n';
 
-            double precioFinal = precioTotal;
-
-            if (tipoCliente == 1) {
-                if (hayRebajas == 's') {
-                    precioFinal = precioFinal - (precioFinal * 0.10);
+            double precioFinal = switch (tipoCliente) {
+                case 1 -> {
+                    double resultado = precioTotal;
+                    if (hayRebajas == 's') resultado -= resultado * 0.10;
+                    if (cantidadTotal >= 5) resultado -= resultado * 0.05;
+                    yield resultado;
                 }
-                if (cantidadTotal >= 5) {
-                    precioFinal = precioFinal - (precioFinal * 0.05);
+                case 2 -> {
+                    double resultado = precioTotal;
+                    resultado -= resultado * 0.15;
+                    if (hayRebajas == 's') resultado -= resultado * 0.10;
+                    if (cantidadTotal >= 3) resultado -= resultado * 0.08;
+                    yield resultado;
                 }
-            } else if (tipoCliente == 2) {
-                precioFinal = precioFinal - (precioFinal * 0.15);
-                if (hayRebajas == 's') {
-                    precioFinal = precioFinal - (precioFinal * 0.10);
+                case 3 -> {
+                    double resultado = precioTotal;
+                    resultado -= resultado * 0.20;
+                    if (hayRebajas == 's') resultado -= resultado * 0.15;
+                    if (cantidadTotal >= 2) resultado -= resultado * 0.10;
+                    yield resultado;
                 }
-                if (cantidadTotal >= 3) {
-                    precioFinal = precioFinal - (precioFinal * 0.08);
+                case 4 -> {
+                    double resultado = precioTotal;
+                    resultado -= resultado * 0.30;
+                    if (hayRebajas == 's') resultado -= resultado * 0.20;
+                    if (cantidadTotal >= 1) resultado -= resultado * 0.15;
+                    yield resultado;
                 }
-            } else if (tipoCliente == 3) {
-                precioFinal = precioFinal - (precioFinal * 0.20);
-                if (hayRebajas == 's') {
-                    precioFinal = precioFinal - (precioFinal * 0.15);
-                }
-                if (cantidadTotal >= 2) {
-                    precioFinal = precioFinal - (precioFinal * 0.10);
-                }
-            } else if (tipoCliente == 4) {
-                precioFinal = precioFinal - (precioFinal * 0.30);
-                if (hayRebajas == 's') {
-                    precioFinal = precioFinal - (precioFinal * 0.20);
-                }
-                if (cantidadTotal >= 1) {
-                    precioFinal = precioFinal - (precioFinal * 0.15);
-                }
-            }
+                default -> precioTotal;
+            };
 
             if (precioFinal > 500) {
                 precioFinal = precioFinal - 50;
@@ -126,4 +122,3 @@ public class CalculadoraDescuentos {
         scanner.close();
     }
 }
-
