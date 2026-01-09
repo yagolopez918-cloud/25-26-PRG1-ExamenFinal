@@ -1,14 +1,46 @@
 import java.util.Scanner;
 
 public class CalculadoraDescuentos {
+
+    private static final int MAX_PRODUCTOS = 10;
+
+    private static final int CLIENTE_NORMAL = 1;
+    private static final int CLIENTE_ESTUDIANTE = 2;
+    private static final int CLIENTE_JUBILADO = 3;
+    private static final int CLIENTE_VIP = 4;
+
+    private static final double DESC_NORMAL = 0.00;
+    private static final double DESC_ESTUDIANTE = 0.15;
+    private static final double DESC_JUBILADO = 0.20;
+    private static final double DESC_VIP = 0.30;
+
+    private static final double DESC_REBAJAS_NORMAL = 0.10;
+    private static final double DESC_REBAJAS_ESTUDIANTE = 0.10;
+    private static final double DESC_REBAJAS_JUBILADO = 0.15;
+    private static final double DESC_REBAJAS_VIP = 0.20;
+
+    private static final double DESC_CANT_NORMAL = 0.05;
+    private static final double DESC_CANT_ESTUDIANTE = 0.08;
+    private static final double DESC_CANT_JUBILADO = 0.10;
+    private static final double DESC_CANT_VIP = 0.15;
+
+    private static final int MIN_NORMAL = 5;
+    private static final int MIN_ESTUDIANTE = 3;
+    private static final int MIN_JUBILADO = 2;
+    private static final int MIN_VIP = 1;
+
+    private static final double LIMITE_DESCUENTO_FIJO = 500;
+    private static final double DESCUENTO_FIJO = 50;
+
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
+        boolean sistemaActivo = true;
 
         System.out.println("Calculadora de Descuentos - Tienda Online");
 
-        boolean sistemaActivo = true;
-
         while (sistemaActivo) {
+
             System.out.println("[1] Realizar Nueva Compra");
             System.out.println("[2] Salir");
             System.out.print("Opcion: ");
@@ -16,7 +48,6 @@ public class CalculadoraDescuentos {
             scanner.nextLine();
 
             if (opcionMenu == 2) {
-                System.out.println("Saliendo del sistema.");
                 sistemaActivo = false;
                 continue;
             }
@@ -26,24 +57,22 @@ public class CalculadoraDescuentos {
                 continue;
             }
 
-            String[] nombresProductos = new String[10];
-            double[] preciosProductos = new double[10];
-            int[] cantidadesProductos = new int[10];
+            String[] nombresProductos = new String[MAX_PRODUCTOS];
+            double[] preciosProductos = new double[MAX_PRODUCTOS];
+            int[] cantidadesProductos = new int[MAX_PRODUCTOS];
             int numeroProductos = 0;
 
-            System.out.println("Carrito de Compra");
-            while (numeroProductos < 10) {
-                System.out.print("Nombre del producto (o 'fin' para terminar): ");
+            while (numeroProductos < MAX_PRODUCTOS) {
+                System.out.print("Nombre del producto (o 'fin'): ");
                 String nombreProducto = scanner.nextLine();
-
                 if (nombreProducto.equalsIgnoreCase("fin")) break;
 
                 nombresProductos[numeroProductos] = nombreProducto;
 
-                System.out.print("Precio de '" + nombreProducto + "': ");
+                System.out.print("Precio: ");
                 preciosProductos[numeroProductos] = scanner.nextDouble();
 
-                System.out.print("Cantidad de '" + nombreProducto + "': ");
+                System.out.print("Cantidad: ");
                 cantidadesProductos[numeroProductos] = scanner.nextInt();
                 scanner.nextLine();
 
@@ -51,7 +80,7 @@ public class CalculadoraDescuentos {
             }
 
             if (numeroProductos == 0) {
-                System.out.println("Carrito vacio, no se puede calcular el descuento.");
+                System.out.println("Carrito vacio.");
                 continue;
             }
 
@@ -63,36 +92,35 @@ public class CalculadoraDescuentos {
                 cantidadTotal += cantidadesProductos[i];
             }
 
-            System.out.println("Configuracion del Descuento");
-            System.out.print("Tipo de cliente (1=Normal, 2=Estudiante, 3=Jubilado, 4=VIP): ");
+            System.out.print("Tipo cliente (1-4): ");
             int tipoCliente = scanner.nextInt();
 
-            System.out.print("Es temporada de rebajas? (1: Sí / 2: No): ");
+            System.out.print("Rebajas? (1=Sí / 2=No): ");
             boolean hayRebajas = scanner.nextInt() == 1;
 
             double porcentajeDescuento = switch (tipoCliente) {
-                case 1 -> {
-                    double d = 0;
-                    if (hayRebajas) d += 0.10;
-                    if (cantidadTotal >= 5) d += 0.05;
+                case CLIENTE_NORMAL -> {
+                    double d = DESC_NORMAL;
+                    if (hayRebajas) d += DESC_REBAJAS_NORMAL;
+                    if (cantidadTotal >= MIN_NORMAL) d += DESC_CANT_NORMAL;
                     yield d;
                 }
-                case 2 -> {
-                    double d = 0.15;
-                    if (hayRebajas) d += 0.10;
-                    if (cantidadTotal >= 3) d += 0.08;
+                case CLIENTE_ESTUDIANTE -> {
+                    double d = DESC_ESTUDIANTE;
+                    if (hayRebajas) d += DESC_REBAJAS_ESTUDIANTE;
+                    if (cantidadTotal >= MIN_ESTUDIANTE) d += DESC_CANT_ESTUDIANTE;
                     yield d;
                 }
-                case 3 -> {
-                    double d = 0.20;
-                    if (hayRebajas) d += 0.15;
-                    if (cantidadTotal >= 2) d += 0.10;
+                case CLIENTE_JUBILADO -> {
+                    double d = DESC_JUBILADO;
+                    if (hayRebajas) d += DESC_REBAJAS_JUBILADO;
+                    if (cantidadTotal >= MIN_JUBILADO) d += DESC_CANT_JUBILADO;
                     yield d;
                 }
-                case 4 -> {
-                    double d = 0.30;
-                    if (hayRebajas) d += 0.20;
-                    if (cantidadTotal >= 1) d += 0.15;
+                case CLIENTE_VIP -> {
+                    double d = DESC_VIP;
+                    if (hayRebajas) d += DESC_REBAJAS_VIP;
+                    if (cantidadTotal >= MIN_VIP) d += DESC_CANT_VIP;
                     yield d;
                 }
                 default -> 0.0;
@@ -100,23 +128,13 @@ public class CalculadoraDescuentos {
 
             double precioFinal = precioTotal * (1 - porcentajeDescuento);
 
-            if (precioFinal > 500) {
-                precioFinal -= 50;
+            if (precioFinal > LIMITE_DESCUENTO_FIJO) {
+                precioFinal -= DESCUENTO_FIJO;
             }
 
-            System.out.println("Resumen de Compra");
-            System.out.println("Precio original total: " + precioTotal + " euros");
-            System.out.println("Numero total de productos: " + cantidadTotal);
-            System.out.println("Precio final con descuento: " + precioFinal + " euros");
-            System.out.println("Ahorro total: " + (precioTotal - precioFinal) + " euros");
-
-            if (precioTotal > 0) {
-                double porcentajeAhorro = ((precioTotal - precioFinal) / precioTotal) * 100;
-                System.out.println("Porcentaje de ahorro: " + porcentajeAhorro + "%");
-            }
+            System.out.println("Precio final: " + precioFinal + " €");
         }
 
         scanner.close();
     }
 }
-
