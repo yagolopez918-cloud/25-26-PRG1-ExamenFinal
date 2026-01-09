@@ -6,7 +6,9 @@ public class CalculadoraDescuentos {
 
         System.out.println("Calculadora de Descuentos - Tienda Online");
 
-        while (true) {
+        boolean sistemaActivo = true;
+
+        while (sistemaActivo) {
             System.out.println("[1] Realizar Nueva Compra");
             System.out.println("[2] Salir");
             System.out.print("Opcion: ");
@@ -15,14 +17,15 @@ public class CalculadoraDescuentos {
 
             if (opcionMenu == 2) {
                 System.out.println("Saliendo del sistema.");
-                break;
+                sistemaActivo = false;
+                continue;
             }
+
             if (opcionMenu != 1) {
                 System.out.println("Opcion no valida.");
                 continue;
             }
 
-         
             String[] nombresProductos = new String[10];
             double[] preciosProductos = new double[10];
             int[] cantidadesProductos = new int[10];
@@ -123,3 +126,4 @@ public class CalculadoraDescuentos {
         scanner.close();
     }
 }
+
