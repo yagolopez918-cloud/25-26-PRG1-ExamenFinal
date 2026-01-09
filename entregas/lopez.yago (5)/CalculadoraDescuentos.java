@@ -70,33 +70,33 @@ public class CalculadoraDescuentos {
             int tipoCliente = scanner.nextInt();
 
             System.out.print("Es temporada de rebajas? (1: Sí / 2: No): ");
-            char hayRebajas = scanner.nextInt() == 1 ? 's' : 'n';
+            boolean hayRebajas = scanner.nextInt() == 1;
 
             double precioFinal = switch (tipoCliente) {
                 case 1 -> {
                     double resultado = precioTotal;
-                    if (hayRebajas == 's') resultado -= resultado * 0.10;
+                    if (hayRebajas) resultado -= resultado * 0.10;
                     if (cantidadTotal >= 5) resultado -= resultado * 0.05;
                     yield resultado;
                 }
                 case 2 -> {
                     double resultado = precioTotal;
                     resultado -= resultado * 0.15;
-                    if (hayRebajas == 's') resultado -= resultado * 0.10;
+                    if (hayRebajas) resultado -= resultado * 0.10;
                     if (cantidadTotal >= 3) resultado -= resultado * 0.08;
                     yield resultado;
                 }
                 case 3 -> {
                     double resultado = precioTotal;
                     resultado -= resultado * 0.20;
-                    if (hayRebajas == 's') resultado -= resultado * 0.15;
+                    if (hayRebajas) resultado -= resultado * 0.15;
                     if (cantidadTotal >= 2) resultado -= resultado * 0.10;
                     yield resultado;
                 }
                 case 4 -> {
                     double resultado = precioTotal;
                     resultado -= resultado * 0.30;
-                    if (hayRebajas == 's') resultado -= resultado * 0.20;
+                    if (hayRebajas) resultado -= resultado * 0.20;
                     if (cantidadTotal >= 1) resultado -= resultado * 0.15;
                     yield resultado;
                 }
@@ -122,3 +122,4 @@ public class CalculadoraDescuentos {
         scanner.close();
     }
 }
+
