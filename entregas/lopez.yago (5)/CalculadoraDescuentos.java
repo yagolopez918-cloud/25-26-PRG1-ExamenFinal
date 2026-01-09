@@ -36,9 +36,7 @@ public class CalculadoraDescuentos {
                 System.out.print("Nombre del producto (o 'fin' para terminar): ");
                 String nombreProducto = scanner.nextLine();
 
-                if (nombreProducto.equalsIgnoreCase("fin")) {
-                    break;
-                }
+                if (nombreProducto.equalsIgnoreCase("fin")) break;
 
                 nombresProductos[numeroProductos] = nombreProducto;
 
@@ -72,39 +70,38 @@ public class CalculadoraDescuentos {
             System.out.print("Es temporada de rebajas? (1: Sí / 2: No): ");
             boolean hayRebajas = scanner.nextInt() == 1;
 
-            double precioFinal = switch (tipoCliente) {
+            double porcentajeDescuento = switch (tipoCliente) {
                 case 1 -> {
-                    double resultado = precioTotal;
-                    if (hayRebajas) resultado -= resultado * 0.10;
-                    if (cantidadTotal >= 5) resultado -= resultado * 0.05;
-                    yield resultado;
+                    double d = 0;
+                    if (hayRebajas) d += 0.10;
+                    if (cantidadTotal >= 5) d += 0.05;
+                    yield d;
                 }
                 case 2 -> {
-                    double resultado = precioTotal;
-                    resultado -= resultado * 0.15;
-                    if (hayRebajas) resultado -= resultado * 0.10;
-                    if (cantidadTotal >= 3) resultado -= resultado * 0.08;
-                    yield resultado;
+                    double d = 0.15;
+                    if (hayRebajas) d += 0.10;
+                    if (cantidadTotal >= 3) d += 0.08;
+                    yield d;
                 }
                 case 3 -> {
-                    double resultado = precioTotal;
-                    resultado -= resultado * 0.20;
-                    if (hayRebajas) resultado -= resultado * 0.15;
-                    if (cantidadTotal >= 2) resultado -= resultado * 0.10;
-                    yield resultado;
+                    double d = 0.20;
+                    if (hayRebajas) d += 0.15;
+                    if (cantidadTotal >= 2) d += 0.10;
+                    yield d;
                 }
                 case 4 -> {
-                    double resultado = precioTotal;
-                    resultado -= resultado * 0.30;
-                    if (hayRebajas) resultado -= resultado * 0.20;
-                    if (cantidadTotal >= 1) resultado -= resultado * 0.15;
-                    yield resultado;
+                    double d = 0.30;
+                    if (hayRebajas) d += 0.20;
+                    if (cantidadTotal >= 1) d += 0.15;
+                    yield d;
                 }
-                default -> precioTotal;
+                default -> 0.0;
             };
 
+            double precioFinal = precioTotal * (1 - porcentajeDescuento);
+
             if (precioFinal > 500) {
-                precioFinal = precioFinal - 50;
+                precioFinal -= 50;
             }
 
             System.out.println("Resumen de Compra");
